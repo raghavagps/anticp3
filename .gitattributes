@@ -1,2 +1,12 @@
 blast/data/* filter=lfs diff=lfs merge=lfs -text
 ncbi_blast_2.15/* filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/BLAST_PRIVACY:Zone.Identifier:Zone.Identifier filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/ChangeLog:Zone.Identifier filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/LICENSE filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/bin filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/LICENSE:Zone.Identifier filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/LICENSE:Zone.Identifier:Zone.Identifier filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/BLAST_PRIVACY filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/BLAST_PRIVACY:Zone.Identifier filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/ChangeLog filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/ChangeLog:Zone.Identifier:Zone.Identifier filter=lfs diff=lfs merge=lfs -text
