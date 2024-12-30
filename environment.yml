@@ -2,10 +2,10 @@ name: anticp3
 channels:
   - defaults
   - conda-forge
-dependecies:
+dependencies:
   - python=3.11
   - pip
-  - pip: 
+  - pip:
       - Bio==1.7.1
       - joblib==1.4.2
       - numpy==1.26.4
