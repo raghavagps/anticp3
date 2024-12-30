@@ -24,7 +24,7 @@ This Github repository has files which need Git-LFS for installation. To install
   ```bash
   cd anticp3
 
-- Step: 3 - Use `environment.yml` (Recommended)
+- Step: 3 - Use `environment.yml` **(Recommended)**
 
   ```bash
   conda env create -f environment.yml
@@ -59,6 +59,11 @@ python3 anticp3.py -i ./example/example_input.fasta -m 2 -t 0.45 -o example_outp
 | `-m {1,2}, --model {1,2}`    | Model type: <br>1: AAC + PSSM based ET<br>2: AAC + PSSM + BLAST ensemble (Best Model).                  | `2`                         |
 | `-t THRESHOLD`               | Threshold value between 0 and 1.                                                                        | `0.5`                       |
 | `-wd WORKING_DIRECTORY`      | Directory path where input/output files are located.                                                    | Current directory of script |
+
+## Installation (For Other Users)
+You would need to install NCBI `BLAST+` for your system.
+
+You can install system-specific NCBI `BLAST+` file from [https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
 
 ## PIP Installation
 `pip3 install anticp3`
