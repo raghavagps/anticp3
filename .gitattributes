@@ -1,0 +1,2 @@
+blast/data/* filter=lfs diff=lfs merge=lfs -text
+ncbi_blast_2.15/* filter=lfs diff=lfs merge=lfs -text
