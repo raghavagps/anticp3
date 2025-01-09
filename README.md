@@ -66,4 +66,5 @@ You would need to install NCBI `BLAST+` for your system.
 You can install system-specific NCBI `BLAST+` file from [https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
 
 ## PIP Installation
-`pip3 install anticp3`
+`pip install anticp3`
+For more information visit [https://pypi.org/project/anticp3/](https://pypi.org/project/anticp3/)
