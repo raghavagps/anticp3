@@ -1,15 +1,13 @@
 name: anticp3
 channels:
   - defaults
-  - conda-forge
 dependencies:
-  - python=3.11
+  - python=3.8
+  - transformers==4.51.1
+  - torch==2.6.0
+  - tqdm==4.67.1
+  - biopython==1.84
+  - colorama==0.4.4
   - pip
   - pip:
-      - Bio==1.7.1
-      - joblib==1.4.2
-      - numpy==1.26.4
-      - pandas==2.2.3
-      - scikit-learn==1.5.2
-      - scipy==1.14.1
-      - tqdm==4.67.1
+      - safetensors==0.5.3

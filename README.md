@@ -1,70 +1,88 @@
-# AntiCP3 : Prediction of Anticancer Proteins
+# ANTICP3 — Anticancer Protein Prediction
 
-**AntiCP3** is a tool developed for the prediction of anticancer proteins. This repository contains the standalone code for AntiCP3. In addition to the standalone, AntiCP3 is also available as a pip installable package and can also be accessed through the webserver: [https://webs.iiitd.edu.in/raghava/anticp3/](https://webs.iiitd.edu.in/raghava/anticp3/).
+<p align="center">
+  <img src="assets/logo.png" alt="ANTICP3 Logo" width="500"/>
+</p>
 
-For prediction of anticancer peptides (length less than 50) use [https://webs.iiitd.edu.in/raghava/anticp2/](AntiCP2).
+**ANTICP3** is a LLM-based tool for binary classification of proteins into *Anticancer* or *Non-Anticancer* classes, based solely on their primary amino acid sequences. It leverages the powerful [ESM2-t33](https://huggingface.co/facebook/esm2_t33_650M_UR50D) transformer model, fine-tuned specifically for anticancer protein prediction.
 
-## Installation (For Linux Users)
+> Developed by **Prof. G. P. S. Raghava's Lab**, IIIT-Delhi  
+> 📄 Please cite: [ANTICP3](https://webs.iiitd.edu.in/raghava/anticp3)
 
-### Git Clone
-This Github repository has files which need Git-LFS for installation. To install Git-LFS:
-```bash 
-  sudo apt install git-lfs
-```
+---
 
-- Step: 1
-  Users can clone this repository using
+## Features
 
-  ```bash
-  git clone https://github.com/amisha1699/anticp3.git
+- Fine-tuned ESM2 model for accurate prediction.
+- Accepts input in FASTA format.
+- Outputs CSV with predicted labels and probabilities.
+- Supports CPU and CUDA for faster inference.
+- Easy to integrate into pipelines and large-scale datasets.
 
-- Step: 2
-  Navigate to the directory
+---
 
-  ```bash
-  cd anticp3
+## Model Details
 
-- Step: 3 - Use `environment.yml` **(Recommended)**
+- **Base Model:** facebook/esm2_t33_650M_UR50D
+- **Fine-Tuned On:** Anticancer protein dataset
+- **Classification Type:** Binary (Anticancer / Non-Anticancer)
+- **Output Format:** CSV with prediction scores and labels
 
-  ```bash
-  conda env create -f environment.yml
+---
 
-- Step: 4
-  
-  Activate the environment
-  ```bash
-  conda activate anticp3
+## Command-Line Arguments
 
-- Alternative to Step: 3 - Using `requirements.txt`
+| Parameter       | Accepted Values            | Description                                                                 |
+|-----------------|----------------------------|-----------------------------------------------------------------------------|
+| `-i`, `--input` | Path to `.fasta` file      | **(Required)** Input file containing protein sequences in FASTA format.     |
+| `-o`, `--output`| Any valid filename (e.g. `results.csv`) | Output CSV file to save predictions. Default is `output.csv`.           |
+| `-t`, `--threshold` | Float (0 to 1)             | Classification threshold for deciding Anticancer vs Non-Anticancer. Default is `0.5`. |
+| `-m`, `--model` | `1` Finetuned ESM2 + BLAST  or `2` Finetuned ESM2             | Classification model for predicting Anticancer vs Non-Anticancer. Default is `1`. |
+| `-d`, `--device`| `cpu` or `cuda`            | Device to run inference on. Defaults to `cpu`. If `cuda` is specified and available, inference runs on GPU. |
 
-  ```bash
-  pip install -r requirements.txt
+## Usage - Standalone
 
-### Usage
+Download the standalone version and set up the environment.
+**[Download ANTICP3 Standalone Package](https://webs.iiitd.edu.in/raghava/anticp3/down.html)**  
+
+### Option 1: Using Conda
+
+Recommended if you're using a Conda environment.
 
 ```bash
-python3 anticp3.py [-h] [-i INPUT] [-o OUTPUT] [-m {1,2}] [-t THRESHOLD] [-wd WORKING_DIRECTORY]
+conda env create -f environment.yml
+conda activate anticp3
 ```
 
-## Example Run:
+### Option 2: Using Pip
 ```bash 
-python3 anticp3.py -i ./example/example_input.fasta -m 2 -t 0.45 -o example_output.csv -wd ./example/
+pip install -r requirements.txt
 ```
 
-| Argument                     | Description                                                                                               | Default Value               |
-|------------------------------|-----------------------------------------------------------------------------------------------------------|-----------------------------|
-| `-h, --help`                 | Displays help information.                                                                               | N/A                         |
-| `-i INPUT, --input INPUT`    | Input protein sequence(s) in FASTA format.                                                              | Required                    |
-| `-o OUTPUT, --output OUTPUT` | Output file for saving results in CSV format.                                                           | `out.csv`                   |
-| `-m {1,2}, --model {1,2}`    | Model type: <br>1: AAC + PSSM based ET<br>2: AAC + PSSM + BLAST ensemble (Best Model).                  | `2`                         |
-| `-t THRESHOLD`               | Threshold value between 0 and 1.                                                                        | `0.5`                       |
-| `-wd WORKING_DIRECTORY`      | Directory path where input/output files are located.                                                    | Current directory of script |
+## HuggingFace
 
-## Installation (For Other Users)
-You would need to install NCBI `BLAST+` for your system.
+## 🤗 Inference via Hugging Face
 
-You can install system-specific NCBI `BLAST+` file from [https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
+You can also run predictions using the fine-tuned model directly from [Hugging Face Hub](https://huggingface.co/raghavagps-group/anticp3):
 
-## PIP Installation
-`pip install anticp3`
-For more information visit [https://pypi.org/project/anticp3/](https://pypi.org/project/anticp3/)
+```python
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+
+# Load tokenizer and fine-tuned model
+tokenizer = AutoTokenizer.from_pretrained("raghavagps-group/anticp3")
+model = AutoModelForSequenceClassification.from_pretrained("raghavagps-group/anticp3")
+
+# Example protein sequence
+sequence = "MANCVVGYIGERCQYRDLKWWELRGGGGSGGGGSAPAFSVSPASGLSDGQSVSVSVSGAAAGETYYIAQCAPVGGQDACNPATATSFTTDASGAASFSFVVRKSYTGSTPEGTPVGSVDCATAACNLGAGNSGLDLGHVALTFGGGGGSGGGGSDHYNCVSSGGQCLYSACPIFTKIQGTCYRGKAKCCKLEHHHHHH"
+
+# Tokenize and predict
+inputs = tokenizer(sequence, return_tensors="pt", truncation=True)
+
+with torch.no_grad():
+    logits = model(**inputs).logits
+    probs = torch.nn.functional.softmax(logits, dim=-1)
+    prediction = torch.argmax(probs, dim=1).item()
+
+labels = {0: "Non-Anticancer", 1: "Anticancer"}
+print("Prediction:", labels[prediction])
