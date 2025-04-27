@@ -9,6 +9,7 @@ from tqdm import tqdm
 from colorama import init, Fore, Style
 import os
 import shutil
+import requests
 
 # Suppress tokenizer warnings like "no max_length"
 transformers_logging.set_verbosity_error()
@@ -38,6 +39,41 @@ def print_banner():
  ---------------------------------------------------------
 """
     print(banner)
+
+def download_model():
+    model_dir = "./model"
+    model_filename = "ESM2-t33.safetensors"
+    safetensors_path = os.path.join(model_dir, model_filename)
+    model_url = f"https://webs.iiitd.edu.in/raghava/anticp3/{model_filename}"
+
+    os.makedirs(model_dir, exist_ok=True)
+
+    if not os.path.exists(safetensors_path):
+        print("[INFO] Running for first time. Downloading Model Weights...")
+        try:
+            response = requests.get(model_url, stream=True)
+            if response.status_code == 200:
+                total_size = int(response.headers.get('content-length', 0))
+                chunk_size = 1024 * 1024  # 1 MB
+                with open(safetensors_path, "wb") as f, tqdm(
+                    desc="Downloading",
+                    total=total_size,
+                    unit="B",
+                    unit_scale=True,
+                    unit_divisor=1024,
+                ) as bar:
+                    for chunk in response.iter_content(chunk_size=chunk_size):
+                        if chunk:
+                            f.write(chunk)
+                            bar.update(len(chunk))
+                print("[INFO] Model weights downloaded successfully.")
+            else:
+                raise Exception(f"Failed to download model. Status code: {response.status_code}")
+        except Exception as e:
+            print(f"[ERROR] Failed to download model weights: {e}")
+            exit(1)
+    else:
+        print("[INFO] Model weights already present. Skipping download.")
     
 def run_blast_and_get_scores(fasta_input, output_dir):
     os.makedirs(output_dir, exist_ok=True)
@@ -93,6 +129,9 @@ def run_blast_and_get_scores(fasta_input, output_dir):
 def main():
     # Banner
     print_banner()
+
+    # Download Model
+    download_model()
     
     # Arguments
     parser = argparse.ArgumentParser(description="Run inference on protein sequences using Fine-tuned ESM2")
